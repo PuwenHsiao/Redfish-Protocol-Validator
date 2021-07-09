@@ -319,6 +319,7 @@ def data_modification_requests(sut: SystemUnderTest):
     try:
         new_user, new_pwd, new_uri = create_account(
             sut, sut.session, request_type=RequestType.NORMAL)
+        print("Created new user {}:{} ({})".format(new_user, new_pwd, new_uri))
         if new_uri:
             response = sut.session.get(sut.rhost + new_uri)
             sut.add_response(new_uri, response)
@@ -326,6 +327,7 @@ def data_modification_requests(sut: SystemUnderTest):
                 etag = utils.get_response_etag(response)
                 data = response.json()
                 if 'PasswordChangeRequired' in data:
+                    print("Performing password change required check on {}".format(new_user))
                     acct.password_change_required(sut, sut.session, new_user,
                                                   new_pwd, new_uri, data, etag)
             pwd = patch_account(sut, sut.session, new_uri,

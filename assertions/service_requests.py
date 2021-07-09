@@ -19,6 +19,15 @@ def test_header(sut: SystemUnderTest, header, header_values, uri, assertion,
     for val in header_values:
         response = sut.session.get(sut.rhost + uri, headers={header: val},
                                    stream=stream)
+        if stream:
+            print("SSE Request Info")
+            print(response.request.url)
+            print(response.request.headers)
+            print(response.request.body)
+            print("SSE Response Info")
+            print(response.status_code)
+            print(response.headers)
+            print(response.text)
         if response.ok:
             msg = 'Test passed for header %s: %s' % (header, val)
             sut.log(Result.PASS, 'GET', response.status_code, uri,

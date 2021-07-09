@@ -328,6 +328,14 @@ def password_change_required(sut: SystemUnderTest, session, user, password,
         headers = {'If-Match': etag} if etag else {}
         response = session.patch(sut.rhost + uri, json=payload,
                                  headers=headers)
+        print("Set PasswordChangeRequired Request Info")
+        print(response.request.url)
+        print(response.request.headers)
+        print(response.request.body)
+        print("Set PasswordChangeRequired Response Info")
+        print(response.status_code)
+        print(response.headers)
+        print(response.text)
         sut.add_response(uri, response,
                          resource_type=ResourceType.MANAGER_ACCOUNT)
         if not response.ok:
@@ -342,17 +350,41 @@ def password_change_required(sut: SystemUnderTest, session, user, password,
     }
     response = requests.post(sut.rhost + sut.sessions_uri, json=payload,
                              headers=headers, verify=sut.verify)
+    print("Login with new account Request Info")
+    print(response.request.url)
+    print(response.request.headers)
+    print(response.request.body)
+    print("Login with new account Response Info")
+    print(response.status_code)
+    print(response.headers)
+    print(response.text)
     sut.add_response(sut.sessions_uri, response,
                      request_type=RequestType.PWD_CHANGE_REQUIRED)
     # GET the account
     response = requests.get(sut.rhost + uri, auth=(user, password),
                             headers=headers)
+    print("Get Account Request Info")
+    print(response.request.url)
+    print(response.request.headers)
+    print(response.request.body)
+    print("Get Account Response Info")
+    print(response.status_code)
+    print(response.headers)
+    print(response.text)
     etag = utils.get_response_etag(response)
     sut.add_response(uri, response, resource_type=ResourceType.MANAGER_ACCOUNT,
                      request_type=RequestType.PWD_CHANGE_REQUIRED)
     # try to get protected resource
     response = requests.get(sut.rhost + sut.sessions_uri,
                             auth=(user, password), headers=headers)
+    print("Get Protected Resource Request Info")
+    print(response.request.url)
+    print(response.request.headers)
+    print(response.request.body)
+    print("Get Protected Resource Response Info")
+    print(response.status_code)
+    print(response.headers)
+    print(response.text)
     sut.add_response(sut.sessions_uri, response,
                      request_type=RequestType.PWD_CHANGE_REQUIRED)
     # change password
@@ -361,6 +393,14 @@ def password_change_required(sut: SystemUnderTest, session, user, password,
         headers['If-Match'] = etag
     response = requests.patch(uri, auth=(user, password), json=payload,
                               headers=headers)
+    print("Set New Password Request Info")
+    print(response.request.url)
+    print(response.request.headers)
+    print(response.request.body)
+    print("Set New Password Response Info")
+    print(response.status_code)
+    print(response.headers)
+    print(response.text)
     sut.add_response(uri, response,
                      resource_type=ResourceType.MANAGER_ACCOUNT,
                      request_type=RequestType.PWD_CHANGE_REQUIRED)
